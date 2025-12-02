@@ -1,5 +1,12 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Providers } from "./providers";
+import { startSyncScheduler } from "@/lib/sync-scheduler";
+
+// Start background segment/attribute sync on server startup (idempotent)
+if (typeof window === 'undefined') {
+  startSyncScheduler();
+}
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,11 +25,12 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        suppressHydrationWarning
       >
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

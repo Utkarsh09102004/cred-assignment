@@ -1,0 +1,86 @@
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "library"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Segment {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([name])
+}
+
+model Attribute {
+  id          String   @id
+  name        String
+  type        String
+  ops         String
+  description String
+  enumValues  String?
+  min         Float?
+  max         Float?
+  itemType    String?
+  schema      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([id])
+  @@index([type])
+}
+
+model SyncMetadata {
+  id              String    @id @default("singleton")
+  lastSyncAt      DateTime?
+  isInitialSync   Boolean   @default(true)
+  totalSegments   Int       @default(0)
+  totalAttributes Int       @default(0)
+  totalUsers      Int       @default(0)
+  maxPageSize     Int       @default(1000)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Conversation {
+  id         String        @id
+  title      String?
+  treeState  String?
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+  messages   ChatMessage[]
+  versions   TreeVersion[]
+}
+
+model ChatMessage {
+  id             String       @id @default(cuid())
+  conversationId String
+  role           String
+  content        String
+  createdAt      DateTime     @default(now())
+
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId])
+}
+
+model TreeVersion {
+  id             String       @id @default(cuid())
+  conversationId String
+  version        Int
+  treeState      String
+  validationOutput String?
+  isValid        Boolean      @default(false)
+  validatedAt    DateTime?
+  createdAt      DateTime     @default(now())
+
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId])
+  @@unique([conversationId, version])
+}
