@@ -1,12 +1,18 @@
 # cred-assignment
 
-Local web app with an AI copilot that builds and validates decision trees (segments + attributes) against the provided APIs. The UI is at `http://localhost:3000` with chat, live tree preview, and “Validate & Submit”.
+Local web app with an AI copilot that builds and validates decision trees (segments + attributes) against the provided APIs. The UI is at `http://localhost:3000` with chat, live tree preview, and “Validate & Submit`. For a one-shot setup, run `make setup-build` (installs, generates Prisma, migrates, syncs, builds, starts prod).
+
+
 
 ## Prerequisites
 - Node.js 20+
 - npm (bundled with Node)
 - SQLite (repo includes `dev.db`)
 - API tokens: `BEARER_TOKEN`, `ANTHROPIC_API_KEY`
+
+## One-shot setup
+1) create a .env file (take)
+2) run `make setup-build`
 
 ## Setup
 1) Install dependencies
@@ -16,8 +22,8 @@ make install
 
 2) Configure environment
 ```bash
-cp .env.example .env.local
-# fill in API_BASE_URL, BEARER_TOKEN, ANTHROPIC_API_KEY (DATABASE_URL already points to dev.db)
+cp .env.example .env
+# fill in BEARER_TOKEN, ANTHROPIC_API_KEY (DATABASE_URL already points to dev.db)
 ```
 
 
