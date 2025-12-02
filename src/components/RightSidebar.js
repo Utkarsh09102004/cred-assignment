@@ -276,7 +276,7 @@ export default function RightSidebar({
             onClick={() =>
               downloadJson(
                 activeTree,
-                `tree-${conversationId || 'conversation'}.json`
+                'final_tree.json'
               )
             }
             disabled={!activeTree}
@@ -288,7 +288,7 @@ export default function RightSidebar({
             onClick={() =>
               downloadJson(
                 activeValidation,
-                `validation-${conversationId || 'conversation'}.json`
+                'validation_report.json'
               )
             }
             disabled={!activeValidation}
