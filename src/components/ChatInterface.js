@@ -302,7 +302,8 @@ function ChatInterfaceInner({ conversationId, setConversationId, pendingInitialI
       try {
         const res = await fetch(`/api/conversations/${conversationId}/messages`);
         const data = await res.json();
-        if (data.success && Array.isArray(data.messages)) {
+        // Only hydrate when the server has messages; avoid overwriting a just-sent first message with an empty array
+        if (data.success && Array.isArray(data.messages) && data.messages.length > 0) {
           setMessages(data.messages);
         }
       } catch (err) {
